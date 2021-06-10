@@ -1,8 +1,7 @@
 <?php
-
-
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\StaffController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,5 +18,19 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::get('staff/', [staffController::class, 'index'])
+    ->name('staff.home');
+Route::get('staff/login', [staffController::class, 'login'])
+    ->name('staff.login');
+Route::post('staff/login', [staffController::class, 'handleLogin'])
+    ->name('staff.handleLogin');
+Route::get('staff/logout', [staffController::class, 'index'])
+    ->name('staff.logout');
+
+Route::get('staff/', [staffController::class, 'index'])
+    ->name('staff.home')
+    ->middleware('auth:staff');
+Route::view('staff/dashboard', 'staff.dashboard') -> middleware('auth:staff');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
